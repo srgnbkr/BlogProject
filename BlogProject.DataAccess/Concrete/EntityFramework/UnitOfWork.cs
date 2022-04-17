@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BlogProject.DataAccess.Concrete.EntityFramework
 {
-    internal class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
 
         #region Variables

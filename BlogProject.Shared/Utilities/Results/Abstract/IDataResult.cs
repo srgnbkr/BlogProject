@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlogProject.Shared.Utilities.Results.Abstract
 {
-    internal interface IDataResult<out T> : IResult
+    public interface IDataResult<out T> : IResult
     {
         public T Data { get;  }
     }
