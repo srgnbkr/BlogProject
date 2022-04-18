@@ -34,7 +34,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             return PartialView("_CategoryAddPartial");
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Add(CategoryAddDto categoryAddDto)
         {
             if (ModelState.IsValid)
