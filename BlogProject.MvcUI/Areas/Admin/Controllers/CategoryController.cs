@@ -40,24 +40,22 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _categoryService.AddAsync(categoryAddDto, "Sergen Bakır");
-                if (result.ResultStatus == ResultStatus.Success)
+                if (result.ResultStatus==ResultStatus.Success)
                 {
                     var categoryAddAjaxModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
                     {
                         CategoryDto = result.Data,
-                        CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", result.Data)
+                        CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", categoryAddDto)
                     });
                     return Json(categoryAddAjaxModel);
                 }
-                
-                
             }
-
             var categoryAddAjaxErrorModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
             {
                 CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", categoryAddDto)
             });
             return Json(categoryAddAjaxErrorModel);
+            
         }
 
 
