@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BlogProject.MvcUI.Areas.Admin.Controllers
@@ -22,7 +23,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var result = await  _categoryService.GetAllAsync();
+            var result = await  _categoryService.GetAllByNonDeletedAsync();
             return View(result.Data);
             
             
@@ -59,5 +60,21 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
         }
 
 
+        public async Task<JsonResult> GetAllCategory()
+        {
+            var result = await _categoryService.GetAllAsync();
+            var categoires = JsonSerializer.Serialize(result.Data, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(categoires);
+        }
+
+        public async Task<JsonResult> Delete(int categoryId)
+        {
+            var result = await _categoryService.DeleteAsync(categoryId, "Sergen Bakır");
+            var ajaxResult = JsonSerializer.Serialize(result);
+            return Json(ajaxResult);
+        }
     }
 }
