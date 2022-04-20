@@ -1,4 +1,4 @@
-using BlogProject.Services.Extesions;
+using BlogProject.Services.Extensions;
 using BlogProject.Services.Helpers.AutoMapperProfies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
