@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BlogProject.Services.Concrete
 {
-    public class CategoryManager : ICategoryService  
+    public class CategoryManager : ICategoryService
     {
         #region Variables
         private readonly IUnitOfWork _unitOfWork;
@@ -65,13 +65,13 @@ namespace BlogProject.Services.Concrete
                 ResultStatus = ResultStatus.Error,
                 Message = Messages.Category.CategoryNotFound
             });
-                
+
         }
 
         public async Task<IDataResult<CategoryListDto>> GetAllByNonDeletedAsync()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync(c => !c.IsDeleted, c=>c.Articles);
-            if(categories.Count > -1)
+            var categories = await _unitOfWork.Categories.GetAllAsync(c => !c.IsDeleted, c => c.Articles);
+            if (categories.Count > -1)
             {
                 return new DataResult<CategoryListDto>(ResultStatus.Success, new CategoryListDto
                 {
@@ -101,6 +101,21 @@ namespace BlogProject.Services.Concrete
             return new DataResult<CategoryListDto>(ResultStatus.Error, Messages.Category.CategoryNotFound, null);
         }
 
+        public async Task<IDataResult<CategoryUpdateDto>> GetCategoryUpdateDto(int categoryId)
+        {
+            var result = await _unitOfWork.Categories.AnyAsync(c => c.Id == categoryId);
+            if (result)
+            {
+                var category = await _unitOfWork.Categories.GetAsync(c => c.Id == categoryId);
+                var categoryUpdateDto = _mapper.Map<CategoryUpdateDto>(category);
+                return new DataResult<CategoryUpdateDto>(ResultStatus.Success, categoryUpdateDto);
+            }
+            else
+            {
+                return new DataResult<CategoryUpdateDto>(ResultStatus.Error, Messages.Category.CategoryNotFound, null);
+            }
+        }
+
 
         #endregion
 
@@ -110,10 +125,10 @@ namespace BlogProject.Services.Concrete
             var category = _mapper.Map<Category>(categoryAddDto);
             category.CreatedByName = createdByName;
             category.ModifiedByName = createdByName;
-            var addedCategory =await _unitOfWork.Categories.AddAsync(category);
+            var addedCategory = await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.SaveChangesAsync();
 
-            return new DataResult<CategoryDto>(ResultStatus.Success,Messages.Category.CategoryAdded ,new CategoryDto
+            return new DataResult<CategoryDto>(ResultStatus.Success, Messages.Category.CategoryAdded, new CategoryDto
             {
                 ResultStatus = ResultStatus.Success,
                 Message = Messages.Category.CategoryAdded,
@@ -127,11 +142,12 @@ namespace BlogProject.Services.Concrete
 
         public async Task<IDataResult<CategoryDto>> UpdateAsync(CategoryUpdateDto categoryUpdateDto, string modifiedByName)
         {
-            var category = _mapper.Map<Category>(categoryUpdateDto);
+            var oldCategory = await _unitOfWork.Categories.GetAsync(c => c.Id == categoryUpdateDto.Id);
+            var category = _mapper.Map<CategoryUpdateDto, Category>(categoryUpdateDto, oldCategory);
             category.ModifiedByName = modifiedByName;
             var updatedCategory = await _unitOfWork.Categories.UpdateAsync(category);
             await _unitOfWork.SaveChangesAsync();
-            return new DataResult<CategoryDto>(ResultStatus.Success, Messages.Category.CategoryUpdated, new CategoryDto
+            return new DataResult<CategoryDto>(ResultStatus.Success,Messages.Category.CategoryUpdated, new CategoryDto
             {
                 Category = updatedCategory,
                 ResultStatus = ResultStatus.Success,
@@ -177,6 +193,8 @@ namespace BlogProject.Services.Concrete
             }
             return new Result(ResultStatus.Error, Messages.Category.CategoryNotFound);
         }
+
+
         #endregion
 
 

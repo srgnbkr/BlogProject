@@ -17,6 +17,7 @@ namespace BlogProject.Services.Helpers.AutoMapperProfies
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now));
             CreateMap<CategoryUpdateDto, Category>()
                 .ForMember(dest => dest.ModifiedDate, opt => opt.MapFrom(src => DateTime.Now));
+            CreateMap<Category, CategoryUpdateDto>();
 
         }
     }

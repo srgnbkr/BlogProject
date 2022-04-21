@@ -1,6 +1,7 @@
 ﻿@using BlogProject.Shared.Utilities.Results.ComplexTypes
 @model BlogProject.Entities.DTOs.CategoryDto.CategoryListDto
 
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -65,8 +66,8 @@
                             <td>@category.ModifiedDate.ToShortDateString()</td>
                             <td>@category.ModifiedByName</td>
                             <td>
-                                <button class="btn btn-primary btn-sm"><span class="fas fa-edit"></span> Düzenle</button>
-                                <button class="btn btn-danger btn-sm btn-delete" data-id="@category.Id"><span class="fas fa-minus-circle"></span> Sil</button>
+                                <button class="btn btn-primary btn-sm btn-update" data-id="@category.Id"><span class="fas fa-edit"></span></button>
+                                <button class="btn btn-danger btn-sm btn-delete" data-id="@category.Id"><span class="fas fa-minus-circle"></span></button>
                             </td>
                         </tr>
                     }
@@ -87,7 +88,5 @@
 {
     <script src="~/js/categoryIndex.js" type="application/ecmascript"></script>
 }
-
-
 
 
