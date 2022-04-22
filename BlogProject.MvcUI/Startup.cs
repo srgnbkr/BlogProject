@@ -2,6 +2,7 @@ using BlogProject.Services.Extensions;
 using BlogProject.Services.Helpers.AutoMapperProfies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,14 +27,33 @@ namespace BlogProject.MvcUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.LoadMyService();
-            services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile));
+            
             services.AddControllersWithViews().AddRazorRuntimeCompilation().AddJsonOptions(opt =>
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
             });
-            
+
+            services.AddSession();
+            services.AddAutoMapper(typeof(CategoryProfile), typeof(ArticleProfile));
+            services.LoadMyService();
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.LoginPath = new PathString("/Admin/User/Login");
+                opt.LogoutPath = new PathString("/Admin/User/Logout");
+                opt.Cookie = new CookieBuilder
+                {
+                    Name = "BlogProject.Cookie",
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest //Test aþamasýnda olduðu için bu þekilde ayarladým. //Always
+                };
+                opt.SlidingExpiration = true;
+                opt.ExpireTimeSpan = TimeSpan.FromDays(7); // 7 Days ever 
+                opt.AccessDeniedPath = new PathString("/Admin/User/AccessDenied");
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,10 +72,11 @@ namespace BlogProject.MvcUI
             }
 
             app.UseHttpsRedirection();
+            app.UseSession();
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
