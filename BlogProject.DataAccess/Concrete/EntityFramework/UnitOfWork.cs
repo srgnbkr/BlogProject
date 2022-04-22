@@ -17,8 +17,7 @@ namespace BlogProject.DataAccess.Concrete.EntityFramework
         private ArticleRepository _articleRepository;
         private CategoryRepository _categoryRepository;
         private CommentRepository _commentRepository;
-        private RoleRepository _roleRepository;
-        private UserRepository _userRepository;
+       
         #endregion
 
         #region Constructor
@@ -34,9 +33,7 @@ namespace BlogProject.DataAccess.Concrete.EntityFramework
 
         public ICommentRepository Comments => _commentRepository ?? new CommentRepository(_context);
 
-        public IRoleRepository Roles => _roleRepository ?? new RoleRepository(_context);
-
-        public IUserRepository Users => _userRepository ?? new UserRepository(_context);
+        
 
 
         public async Task<int> SaveChangesAsync()
