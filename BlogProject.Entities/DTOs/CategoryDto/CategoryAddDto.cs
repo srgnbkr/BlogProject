@@ -12,19 +12,19 @@ namespace BlogProject.Entities.DTOs.CategoryDto
     {
         [DisplayName("Kategori Adı")]
         [Required(ErrorMessage = "{0} Boş Olmamalı.")]
-        [MaxLength(70, ErrorMessage = "{0} {1} 70 Karakterden Fazla Olmamalı.")]
-        [MinLength(3, ErrorMessage = "{0} {1} 70 Karakterden Az Olmamalı.")]
+        [MaxLength(70, ErrorMessage = "{0} {1}  Karakterden Fazla Olmamalı.")]
+        [MinLength(3, ErrorMessage = "{0} {1}  Karakterden Az Olmamalı.")]
         public string Name { get; set; }
 
 
         [DisplayName("Kategori Açıklaması")]
-        [MaxLength(500, ErrorMessage = "{0} {1} 70 Karakterden Fazla Olmamalı.")]
-        [MinLength(3, ErrorMessage = "{0} {1} 70 Karakterden Az Olmamalı.")]
+        [MaxLength(500, ErrorMessage = "{0} {1}  Karakterden Fazla Olmamalı.")]
+        [MinLength(3, ErrorMessage = "{0} {1}  Karakterden Az Olmamalı.")]
         public string Description { get; set; }
 
         [DisplayName("Kategori Özel Not Alanı")]
-        [MaxLength(500, ErrorMessage = "{0} {1} 70 Karakterden Fazla Olmamalı.")]
-        [MinLength(3, ErrorMessage = "{0} {1} 70 Karakterden Az Olmamalı.")]
+        [MaxLength(500, ErrorMessage = "{0} {1}  Karakterden Fazla Olmamalı.")]
+        [MinLength(3, ErrorMessage = "{0} {1}  Karakterden Az Olmamalı.")]
         public string Note { get; set; }
 
         [DisplayName("Aktif Mi?")]

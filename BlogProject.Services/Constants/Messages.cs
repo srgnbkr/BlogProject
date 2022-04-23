@@ -25,5 +25,10 @@ namespace BlogProject.Services.Constants
             public static string ArticleDeleted => "Article deleted successfully";
             public static string ArticleHardDeleted => "Article deleted from database successfully";
         }
+
+        public static class User
+        {
+            public static string CreateUser => "User created successfully";
+        }
     }
 }
