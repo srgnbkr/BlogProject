@@ -18,7 +18,7 @@ namespace BlogProject.Entities.DTOs.UserDto
         [MinLength(3, ErrorMessage = "{0} {1}  Karakterden Az Olmamalı.")]
         public string UserName { get; set; }
 
-        [DisplayName("EPosta Adresi")]
+        [DisplayName("E-Posta Adresi")]
         [Required(ErrorMessage = "{0} Boş Olmamalı.")]
         [MaxLength(100, ErrorMessage = "{0} {1}  Karakterden Fazla Olmamalı.")]
         [MinLength(10, ErrorMessage = "{0} {1}  Karakterden Az Olmamalı.")]

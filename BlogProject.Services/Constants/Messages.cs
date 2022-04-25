@@ -29,6 +29,10 @@ namespace BlogProject.Services.Constants
         public static class User
         {
             public static string CreateUser => "User created successfully";
+            public static string DeletedUser => "User deleted successfully";
+            public static string UpdatedUser => "User updated successfully";
+            public static string UserNotFound => "User not found";
+
         }
     }
 }
