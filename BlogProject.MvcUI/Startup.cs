@@ -1,4 +1,6 @@
 using BlogProject.MvcUI.AutoMapper.Profiles;
+using BlogProject.MvcUI.Helpers.Abstract;
+using BlogProject.MvcUI.Helpers.Concrete;
 using BlogProject.Services.Extensions;
 using BlogProject.Services.Helpers.AutoMapperProfies;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +40,7 @@ namespace BlogProject.MvcUI
             services.AddSession();
             services.AddAutoMapper(typeof(CategoryProfile), typeof(ArticleProfile),typeof(UserProfile));
             services.LoadMyService();
+            services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(opt =>
             {
                 opt.LoginPath = new PathString("/Admin/User/UserLogin");
