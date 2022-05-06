@@ -40,7 +40,7 @@ namespace BlogProject.MvcUI
             services.LoadMyService();
             services.ConfigureApplicationCookie(opt =>
             {
-                opt.LoginPath = new PathString("/Admin/User/Login");
+                opt.LoginPath = new PathString("/Admin/User/UserLogin");
                 opt.LogoutPath = new PathString("/Admin/User/Logout");
                 opt.Cookie = new CookieBuilder
                 {

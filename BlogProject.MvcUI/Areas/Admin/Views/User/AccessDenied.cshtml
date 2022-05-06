@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
 <html lang="tr">
     <head>
         <meta charset="utf-8" />
@@ -6,28 +10,37 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Giriş Yap</title>
+        <title>403 - Erişim Reddeildi</title>
         <link href="~/css/styles.css" rel="stylesheet" />
-        <link href="~/css/userLogin.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
     </head>
-    <body class="bg-primary">
-        <div id="layoutAuthentication">
-            <div id="layoutAuthentication_content">
+    <body>
+        <div id="layoutError">
+            <div id="layoutError_content">
                 <main>
-                    @RenderBody()
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <div class="text-center mt-4">
+                                    <h1 class="display-1">403</h1>
+                                    <p class="lead">Erişiminiz Reddedilmiştir | Access Denied</p>
+                                    <p>Bu sayfadaki içeriklere yetkiniz yok.</p>
+                                    <a asp-area="Admin" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-arrow-left mr-1"></i>
+                                        Dashboarda Geri Dön
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div>
-            <div id="layoutAuthentication_footer">
+            <div id="layoutError_footer">
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
                             <div class="text-muted">Copyright &copy; BlogProject @DateTime.Now.Year</div>
-                            <div>
-                                <a href="#">Gizlilik Politikası</a>
-                                &middot;
-                                <a href="#">Kullanım Şartları</a>
-                            </div>
+                            
                         </div>
                     </div>
                 </footer>

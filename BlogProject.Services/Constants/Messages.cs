@@ -32,6 +32,7 @@ namespace BlogProject.Services.Constants
             public static string DeletedUser => "User deleted successfully";
             public static string UpdatedUser => "User updated successfully";
             public static string UserNotFound => "User not found";
+            public static string  PasswordWrong => "Email or password is wrong";
 
         }
     }
