@@ -14,7 +14,8 @@ namespace BlogProject.Shared.DataAccess.Concrete.EntityFramework
     where TEntity : class, IEntity, new()
     {
         #region Variables
-        private readonly DbContext _context;
+        //DbContexte erişmek için protected kullandık.
+        protected readonly DbContext _context;
         #endregion
 
         #region Constructor
@@ -69,10 +70,8 @@ namespace BlogProject.Shared.DataAccess.Concrete.EntityFramework
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = _context.Set<TEntity>();
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            query = query.Where(predicate);
+
 
             if (includeProperties.Any())
             {
@@ -83,6 +82,8 @@ namespace BlogProject.Shared.DataAccess.Concrete.EntityFramework
             }
 
             return await query.SingleOrDefaultAsync();
+
+
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)

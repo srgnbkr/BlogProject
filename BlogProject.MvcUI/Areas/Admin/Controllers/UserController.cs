@@ -24,11 +24,14 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
+        #region Variables
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IImageHelper _imageHelper;
         private readonly IMapper _mapper;
+        #endregion
 
+        #region Constructor
         public UserController(UserManager<User> userManager, IWebHostEnvironment env, IMapper mapper,
             SignInManager<User> signInManager, IImageHelper imageHelper)
         {
@@ -37,13 +40,15 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             _signInManager = signInManager;
             _imageHelper = imageHelper;
         }
-
-
-        
-
+        #endregion
 
 
 
+
+
+
+
+        #region Index
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
@@ -55,8 +60,9 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             });
 
         }
+        #endregion
 
-
+        #region UserLogin
         [HttpGet]
         public IActionResult UserLogin()
         {
@@ -95,7 +101,9 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             }
 
         }
+        #endregion
 
+        #region GetAllUsers
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<JsonResult> GetAllUsers()
@@ -112,7 +120,9 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             });
             return Json(userListDto);
         }
+        #endregion
 
+        #region UserAdd
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Add()
@@ -171,9 +181,9 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             return Json(userAddAjaxModelStateErrorModel);
 
         }
+        #endregion
 
-
-
+        #region UserDelete
         [Authorize(Roles = "Admin")]
         public async Task<JsonResult> Delete(int userId)
         {
@@ -206,7 +216,10 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
                 return Json(deletedUserErrorModel);
             }
         }
+        #endregion
 
+
+        #region UserUpdate
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<PartialViewResult> Update(int userId)
@@ -283,20 +296,22 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
                 return Json(userUpdateModelStateErrorViewModel);
             }
         }
+        #endregion
 
 
 
 
 
-        
 
-
+        #region AccessDenied
         [HttpGet]
         public ViewResult AccessDenied()
         {
             return View();
         }
+        #endregion
 
+        #region Logout
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Logout()
@@ -304,8 +319,9 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home", new { Area = "" });
         }
+        #endregion
 
-
+        #region ChangeDateils
         [Authorize]
         [HttpGet]
         public async Task<ViewResult> ChangeDetails()
@@ -364,7 +380,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             }
 
         }
-
+        #endregion
 
 
         #region PasswordChangeMethods

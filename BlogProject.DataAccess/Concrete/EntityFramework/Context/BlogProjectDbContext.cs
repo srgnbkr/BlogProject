@@ -15,13 +15,16 @@ namespace BlogProject.DataAccess.Concrete.EntityFramework.Context
         public DbSet<Article> Articles { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public BlogProjectDbContext(DbContextOptions<BlogProjectDbContext> options) : base(options)
         {
-            optionsBuilder
-                .UseSqlServer(@"Server=(LocalDb)\MSSQLLocalDB;Database=BlogProject;Trusted_Connection=True;");
+
         }
+
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

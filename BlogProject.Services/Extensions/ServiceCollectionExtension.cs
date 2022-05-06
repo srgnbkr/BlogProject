@@ -4,6 +4,7 @@ using BlogProject.DataAccess.Concrete.EntityFramework.Context;
 using BlogProject.Entities.Concrete;
 using BlogProject.Services.Abstract;
 using BlogProject.Services.Concrete;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,11 @@ namespace BlogProject.Services.Extensions
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection LoadMyService(this IServiceCollection serviceCollection)
+        public static IServiceCollection LoadMyService(this IServiceCollection serviceCollection,string connectionString)
         {
-            serviceCollection.AddDbContext<BlogProjectDbContext>();
+            serviceCollection.AddDbContext<BlogProjectDbContext>(options => options.UseSqlServer(connectionString));
 
-            
+
             serviceCollection.AddIdentity<User, Role>(options =>
             {
                 #region Password Settings
