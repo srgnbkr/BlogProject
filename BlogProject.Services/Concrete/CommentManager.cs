@@ -30,7 +30,7 @@ namespace BlogProject.Services.Concrete
                 return new DataResult<int>(ResultStatus.Error,"Hata", -1);
         }
 
-        public async Task<IDataResult<int>> CountByIsDeleted()
+        public async Task<IDataResult<int>> CountByNonDeleted()
         {
             var commentsCount = await _unitOfWork.Comments.CountAsync(c => !c.IsDeleted);
             if (commentsCount > -1)

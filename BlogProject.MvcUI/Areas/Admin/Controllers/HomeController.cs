@@ -37,9 +37,9 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
         [Authorize(Roles = "Admin,Editor")]
         public async Task<IActionResult> Index() 
         {
-            var categoriesCountResult = await _categoryService.CountByIsDeleted();
-            var articlesCountResult = await _articleService.CountByIsDeleted();
-            var commentsCountResult = await _commentService.CountByIsDeleted();
+            var categoriesCountResult = await _categoryService.CountByNonDeleted();
+            var articlesCountResult = await _articleService.CountByNonDeleted();
+            var commentsCountResult = await _commentService.CountByNonDeleted();
             var usersCountResult = await _userManager.Users.CountAsync();
             var articlesResult = await _articleService.GetAllAsync();
 

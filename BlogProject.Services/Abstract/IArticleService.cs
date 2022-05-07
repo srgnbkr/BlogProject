@@ -14,7 +14,7 @@ namespace BlogProject.Services.Abstract
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActiveAsync();
         Task<IDataResult<ArticleListDto>> GetAllByCategoryAsync(int categoryId);
         Task<IDataResult<int>> Count();
-        Task<IDataResult<int>> CountByIsDeleted();
+        Task<IDataResult<int>> CountByNonDeleted();
         #endregion
 
         #region CommandMethods
