@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlogProject.MvcUI.Areas.Admin.Models.ArticleModels
 {
-    public class ArticleAddViewModel
+    public class ArticleUpdateViewModel
     {
         [DisplayName("Başlık")]
         [Required(ErrorMessage = "{0} alanı boş geçilmemelidir.")]
@@ -18,7 +18,12 @@ namespace BlogProject.MvcUI.Areas.Admin.Models.ArticleModels
         [Required(ErrorMessage = "{0} alanı boş geçilmemelidir.")]
         [MinLength(20, ErrorMessage = "{0} alanı {1} karakterden küçük olmamalıdır.")]
         public string Content { get; set; }
+
+
         [DisplayName("Küçük Resim")]
+        public string Thumbnail { get; set; }
+
+        [DisplayName("Küçük Resim Ekle")]
         [Required(ErrorMessage = "{0} alanı boş geçilmemelidir.")]
         public IFormFile ThumbnailFile { get; set; }
 

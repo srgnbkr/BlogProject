@@ -146,6 +146,23 @@ namespace BlogProject.Services.Concrete
 
         }
 
+        public async Task<IDataResult<ArticleUpdateDto>> GetArticleUpdateDtoAsync(int articleId)
+        {
+            var result = await _unitOfWork.Articles.AnyAsync(x => x.Id == articleId);
+            if(result)
+            {
+                var article = await _unitOfWork.Articles.GetAsync(x => x.Id == articleId);
+                var articleUpdateDto = _mapper.Map<ArticleUpdateDto>(article);
+                return new DataResult<ArticleUpdateDto>(ResultStatus.Success, articleUpdateDto);
+            }
+            else
+            {
+                return new DataResult<ArticleUpdateDto>(ResultStatus.Error, Messages.Articles.ArticleNotFound, null);
+            }
+                
+
+        }
+
         public async Task<IDataResult<ArticleDto>> GetAsync(int articleId)
         {
             var data = await _unitOfWork.Articles.GetAsync(x => x.Id == articleId, x => x.User, x => x.Category);

@@ -22,11 +22,11 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
         #endregion
 
         #region Constructor
-        public ArticleController(IArticleService articleService,UserManager<User> userManager, ICategoryService categoryService, IMapper mapper, IImageHelper imageHelper) : base(userManager,mapper,imageHelper)
+        public ArticleController(IArticleService articleService, UserManager<User> userManager, ICategoryService categoryService, IMapper mapper, IImageHelper imageHelper) : base(userManager, mapper, imageHelper)
         {
             _articleService = articleService;
             _categoryService = categoryService;
-            
+
         }
         #endregion
 
@@ -44,7 +44,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
         }
         #endregion
 
-        #region AddMethods
+        #region AddMethod
 
         [HttpGet]
         public async Task<IActionResult> Add()
@@ -67,13 +67,13 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var articleAddDto = Mapper.Map<ArticleAddDto>(articleAddViewModel);
-                var imageResult = await ImageHelper.Upload(articleAddViewModel.Title, articleAddViewModel.Thumbnail,PictureType.Post);
+                var imageResult = await ImageHelper.Upload(articleAddViewModel.Title, articleAddViewModel.ThumbnailFile, PictureType.Post);
 
                 articleAddDto.Thumbnail = imageResult.Data.FullName;
                 var result = await _articleService.AddAsync(articleAddDto, LoggedInUser.UserName);
                 if (result.ResultStatus == ResultStatus.Success)
                 {
-                    TempData.Add("SuccessMessage",result.Message);
+                    TempData.Add("SuccessMessage", result.Message);
                     return RedirectToAction("Index", "Article");
                 }
                 else
@@ -87,5 +87,29 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
 
         }
         #endregion
+
+
+        #region UpdateMethod
+
+        
+        [HttpGet]
+        public async Task<IActionResult> Update(int articleId)
+        {
+            var articleResult = await _articleService.GetArticleUpdateDtoAsync(articleId);
+            var categoryResult = await _categoryService.GetAllByNonDeletedAndActiveAsync();
+            if (articleResult.ResultStatus == ResultStatus.Success &&  categoryResult.ResultStatus == ResultStatus.Success)
+            {
+                var articleUpdateViewModel = Mapper.Map<ArticleUpdateViewModel>(articleResult.Data);
+                articleUpdateViewModel.Categories = categoryResult.Data.Categories;
+                return View(articleUpdateViewModel);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+
+        }
+        #endregion        
     }
 }

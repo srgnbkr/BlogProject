@@ -9,6 +9,7 @@ namespace BlogProject.Services.Abstract
 
         #region QueryMethods
         Task<IDataResult<ArticleDto>> GetAsync(int articleId);
+        Task<IDataResult<ArticleUpdateDto>> GetArticleUpdateDtoAsync(int articleId);
         Task<IDataResult<ArticleListDto>> GetAllAsync();
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAsync();
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActiveAsync();
