@@ -58,7 +58,7 @@
                         <td>@article.Id</td>
                         <td>@article.Category.Name</td>
                         <td>@article.Title</td>
-                        <td><img src="~/img/@article.Thumbnail" class="my-image-table" /></td>
+                        <td><img class="rounded-circle mx-auto d-block" src="@article.Thumbnail" style="width:135px"  /></td>
                         <td>@article.Date.ToShortDateString()</td>
                         <td>@article.ViewCount</td>
                         <td>@article.CommentCount</td>
@@ -83,4 +83,8 @@
 @section Scripts
 {
     <script src="~/AdminLTE/js/articleIndex.js" type="application/ecmascript"></script>
+}
+@section Styles
+{
+    
 }
