@@ -9,6 +9,7 @@ using BlogProject.Shared.Utilities.Results.ComplexTypes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BlogProject.MvcUI.Areas.Admin.Controllers
@@ -32,7 +33,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
         #endregion
 
 
-        #region GetAll Methods
+        #region Index Methods
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -169,6 +170,20 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             
         }
 
+        #endregion
+
+        #region GetAllMethods
+
+        public async Task<JsonResult> GetAllArticles()
+        {
+            var articles = await _articleService.GetAllByNonDeletedAndActiveAsync();
+            var articleResult = JsonSerializer.Serialize(articles,new JsonSerializerOptions 
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(articleResult);
+
+        }
         #endregion
 
 
