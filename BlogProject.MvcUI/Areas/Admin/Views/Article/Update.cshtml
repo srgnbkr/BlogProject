@@ -16,6 +16,8 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserId" />
                     <div class="form-group">
                         <input asp-for="Title" type="text" id="articleTitle" class="form-control" />
                         <span asp-validation-for="Title" class="text-danger"></span>
