@@ -10,29 +10,39 @@ namespace BlogProject.Services.Constants
     {
         public static class Category
         {
-            public static string CategoryNotFound => "Cateogory not found";
-            public static string CategoryAdded => "Category added successfully";
-            public static string CategoryUpdated => "Category updated successfully";
-            public static string CategoryDeleted => "Category deleted successfully";
-            public static string CategoryHardDeleted => "Category deleted from database successfully";
+            public static string CategoryNotFound =>"Kategori bulunamadı";
+            public static string CategoryAdded => "Kategori başarıyla eklendi";
+            public static string CategoryUpdated => "Kategori başarıyla güncellendi";
+            public static string CategoryDeleted => "Kategori başarıyla silindi";
+            public static string CategoryHardDeleted => "Kategori başarıyla veritabanından silindi";
         }
 
         public static class Articles
         {
-            public static string ArticleNotFound => "Article not found";
-            public static string ArticleAdded => "Article added successfully";
-            public static string ArticleUpdated => "Article updated successfully";
-            public static string ArticleDeleted => "Article deleted successfully";
-            public static string ArticleHardDeleted => "Article deleted from database successfully";
+            public static string ArticleNotFound => "Makale bulunamadı";
+            public static string ArticleAdded => "Makale başarıyla eklendi";
+            public static string ArticleUpdated => "Makale başarıyla güncellendi";
+            public static string ArticleDeleted => "Makale başarıyla silindi";
+            public static string ArticleHardDeleted => "Makale başarıyla veritabanından silindi";
         }
+
+        public static class Comment
+        {
+            public static string CommentNotFound => "Yorum bulunamadı";
+            public static string CommentAdded => "Yorum Eklendi";
+            public static string CommentUpdated => "Yorum Güncellendi";
+            public static string CommentDeleted => "Yorum Silindi";
+            public static string CommentHardDeleted => "Yorum veritabanından silindi";
+        }
+
 
         public static class User
         {
-            public static string CreateUser => "User created successfully";
-            public static string DeletedUser => "User deleted successfully";
-            public static string UpdatedUser => "User updated successfully";
-            public static string UserNotFound => "User not found";
-            public static string  PasswordWrong => "Email or password is wrong";
+            public static string CreateUser => "Kullanıcı başarıyla oluşturuldu";
+            public static string DeletedUser => "Kullanıcı başarıyla silindi";
+            public static string UpdatedUser => "Kullanıcı başarıyla güncellendi";
+            public static string UserNotFound => "Kullanıcı bulunamadı";
+            public static string  PasswordWrong => "EPosta Ya da Şifre Hatalı";
 
         }
     }

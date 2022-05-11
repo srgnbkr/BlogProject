@@ -8,6 +8,7 @@ using BlogProject.Services.Abstract;
 using BlogProject.Shared.Utilities.Results.ComplexTypes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -20,15 +21,20 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
         #region Variables
         private readonly IArticleService _articleService;
         private readonly ICategoryService _categoryService;
-
+        private readonly IToastNotification _toastNotification;
         #endregion
 
         #region Constructor
-        public ArticleController(IArticleService articleService, UserManager<User> userManager, ICategoryService categoryService, IMapper mapper, IImageHelper imageHelper) : base(userManager, mapper, imageHelper)
+        public ArticleController(
+            IArticleService articleService, 
+            UserManager<User> userManager, 
+            ICategoryService categoryService, 
+            IMapper mapper, IImageHelper imageHelper, 
+            IToastNotification toastNotificatio) : base(userManager, mapper, imageHelper)
         {
             _articleService = articleService;
             _categoryService = categoryService;
-
+            _toastNotification = toastNotificatio;
         }
         #endregion
 
@@ -75,7 +81,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
                 var result = await _articleService.AddAsync(articleAddDto, LoggedInUser.UserName, LoggedInUser.Id);
                 if (result.ResultStatus == ResultStatus.Success)
                 {
-                    TempData.Add("SuccessMessage", result.Message);
+                    _toastNotification.AddSuccessToastMessage(result.Message);
                     return RedirectToAction("Index", "Article");
                 }
                 else
@@ -142,7 +148,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
                     {
                         ImageHelper.Delete(oldThumbnail);
                     }
-                    TempData.Add("SuccessMessage", result.Message);
+                    _toastNotification.AddInfoToastMessage(result.Message);
                     return RedirectToAction("Index", "Article");
                 }
                 else

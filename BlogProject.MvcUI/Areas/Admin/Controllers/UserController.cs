@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using BlogProject.MvcUI.Helpers.Abstract;
 using BlogProject.Entities.ComplexTypes;
+using NToastNotify;
 
 namespace BlogProject.MvcUI.Areas.Admin.Controllers
 {
@@ -30,16 +31,24 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IImageHelper _imageHelper;
         private readonly IMapper _mapper;
+        private readonly IToastNotification _toastNotification;
         #endregion
 
         #region Constructor
-        public UserController(UserManager<User> userManager, IWebHostEnvironment env, IMapper mapper,
-            SignInManager<User> signInManager, IImageHelper imageHelper)
+        public UserController(
+            UserManager<User> userManager, 
+            IWebHostEnvironment env, 
+            IMapper mapper,
+            SignInManager<User> signInManager, 
+            IImageHelper imageHelper,
+            IToastNotification toastNotification
+            )
         {
             _userManager = userManager;
             _mapper = mapper;
             _signInManager = signInManager;
             _imageHelper = imageHelper;
+            _toastNotification = toastNotification;
         }
         #endregion
 
@@ -362,7 +371,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
                     {
                         _imageHelper.Delete(oldUserPicture);
                     }
-                    TempData.Add("SuccessMessage", Messages.User.UpdatedUser);
+                    _toastNotification.AddSuccessToastMessage("Bilgileriniz Başarıyla Güncellendi.");
                     return View(userUpdateDto);
                 }
                 else
@@ -409,7 +418,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
                         await _userManager.UpdateSecurityStampAsync(user);
                         await _signInManager.SignOutAsync();
                         await _signInManager.PasswordSignInAsync(user, userPasswordChangeDto.NewPassword, true, false);
-                        TempData.Add("SuccessMessage", $"Şifreniz başarıyla değiştirilmiştir.");
+                        _toastNotification.AddSuccessToastMessage("Şifreniz Başarıyla Değiştirildi.", new ToastrOptions { Title = "Başarılı İşlem", CloseButton = true });
                         return View();
                     }
                     else
