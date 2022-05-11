@@ -39,7 +39,13 @@ namespace BlogProject.MvcUI
             }).AddNToastNotifyToastr();
 
             services.AddSession();
-            services.AddAutoMapper(typeof(CategoryProfile), typeof(ArticleProfile),typeof(UserProfile),typeof(ViewModelsProfile));
+            services.AddAutoMapper(
+                typeof(CategoryProfile), 
+                typeof(ArticleProfile), 
+                typeof(UserProfile), 
+                typeof(ViewModelsProfile), 
+                typeof(CommentProfile));
+            
             services.LoadMyService(connectionString: Configuration.GetConnectionString("LocalDB"));
             services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(opt =>

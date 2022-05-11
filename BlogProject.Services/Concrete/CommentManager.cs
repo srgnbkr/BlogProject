@@ -15,28 +15,24 @@ using System.Threading.Tasks;
 
 namespace BlogProject.Services.Concrete
 {
-    public class CommentManager : ICommentService
+    public class CommentManager : BaseManager,ICommentService
     {
 
-        #region Variables
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        #endregion
+        
 
         #region Constructor
-        public CommentManager(IUnitOfWork unitOfWork, IMapper mapper)
+        public CommentManager(IUnitOfWork unitOfWork, IMapper mapper):base(unitOfWork,mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            
         }
         #endregion
 
         #region AddMethod
         public async Task<IDataResult<CommentDto>> AddAsync(CommentAddDto commentAddDto)
         {
-            var comment = _mapper.Map<Comment>(commentAddDto);
-            var addedComment = await _unitOfWork.Comments.AddAsync(comment);
-            await _unitOfWork.SaveChangesAsync();
+            var comment = Mapper.Map<Comment>(commentAddDto);
+            var addedComment = await UnitOfWork.Comments.AddAsync(comment);
+            await UnitOfWork.SaveChangesAsync();
             return new DataResult<CommentDto>(ResultStatus.Success, Messages.Comment.CommentAdded, new CommentDto
             {
                 Comment =  addedComment
@@ -47,7 +43,7 @@ namespace BlogProject.Services.Concrete
         #region CountMethod
         public async Task<IDataResult<int>> CountAsync()
         {
-            var commentsCount = await _unitOfWork.Comments.CountAsync();
+            var commentsCount = await UnitOfWork.Comments.CountAsync();
             if (commentsCount > -1)
                 return new DataResult<int>(ResultStatus.Success, commentsCount);
             else
@@ -59,7 +55,7 @@ namespace BlogProject.Services.Concrete
         #region CountByNonDeletedMethod
         public async Task<IDataResult<int>> CountByNonDeletedAsync()
         {
-            var commentsCount = await _unitOfWork.Comments.CountAsync(c => !c.IsDeleted);
+            var commentsCount = await UnitOfWork.Comments.CountAsync(c => !c.IsDeleted);
             if (commentsCount > -1)
                 return new DataResult<int>(ResultStatus.Success, commentsCount);
             else
@@ -71,14 +67,14 @@ namespace BlogProject.Services.Concrete
         #region DeleteMethod
         public async Task<IDataResult<CommentDto>> DeleteAsync(int commentId, string modifiedByName)
         {
-            var comment = await _unitOfWork.Comments.GetAsync(x => x.Id == commentId);
+            var comment = await UnitOfWork.Comments.GetAsync(x => x.Id == commentId);
             if (comment != null)
             {
                 comment.IsDeleted = true;
                 comment.ModifiedByName = modifiedByName;
                 comment.ModifiedDate = DateTime.Now;
-                var deletedComment = await _unitOfWork.Comments.UpdateAsync(comment);
-                await _unitOfWork.SaveChangesAsync();
+                var deletedComment = await UnitOfWork.Comments.UpdateAsync(comment);
+                await UnitOfWork.SaveChangesAsync();
                 return new DataResult<CommentDto>(ResultStatus.Success, Messages.Comment.CommentDeleted, new CommentDto
                 {
                     Comment = deletedComment
@@ -94,7 +90,7 @@ namespace BlogProject.Services.Concrete
         #region GetAllMethod
         public async Task<IDataResult<CommentListDto>> GetAllAsync()
         {
-            var comments = await _unitOfWork.Comments.GetAllAsync();
+            var comments = await UnitOfWork.Comments.GetAllAsync();
             if (comments.Count > -1)
             {
                 return new DataResult<CommentListDto>(ResultStatus.Success, new CommentListDto
@@ -113,7 +109,7 @@ namespace BlogProject.Services.Concrete
         #region GetAllByDeletedMethod
         public async Task<IDataResult<CommentListDto>> GetAllByDeletedAsync()
         {
-            var comments = await _unitOfWork.Comments.GetAllAsync(c => c.IsDeleted);
+            var comments = await UnitOfWork.Comments.GetAllAsync(c => c.IsDeleted);
             if (comments.Count > -1)
             {
                 return new DataResult<CommentListDto>(ResultStatus.Success, new CommentListDto
@@ -131,7 +127,7 @@ namespace BlogProject.Services.Concrete
         #region GetAllByNonDeletedAndActiveMethod
         public async Task<IDataResult<CommentListDto>> GetAllByNonDeletedAndActiveAsync()
         {
-            var comments = await _unitOfWork.Comments.GetAllAsync(c => !c.IsDeleted && c.IsActive);
+            var comments = await UnitOfWork.Comments.GetAllAsync(c => !c.IsDeleted && c.IsActive);
             if (comments.Count > -1)
             {
                 return new DataResult<CommentListDto>(ResultStatus.Success, new CommentListDto
@@ -149,7 +145,7 @@ namespace BlogProject.Services.Concrete
         #region GetAllByNonDeletedMethod
         public async Task<IDataResult<CommentListDto>> GetAllByNonDeletedAsync()
         {
-            var comments = await _unitOfWork.Comments.GetAllAsync(c => !c.IsDeleted);
+            var comments = await UnitOfWork.Comments.GetAllAsync(c => !c.IsDeleted);
             if (comments.Count > -1)
             {
                 return new DataResult<CommentListDto>(ResultStatus.Success, new CommentListDto
@@ -167,7 +163,7 @@ namespace BlogProject.Services.Concrete
         #region GetByIdMethod
         public async Task<IDataResult<CommentDto>> GetAsync(int commentId)
         {
-            var comment = await _unitOfWork.Comments.GetAsync(c => c.Id == commentId);
+            var comment = await UnitOfWork.Comments.GetAsync(c => c.Id == commentId);
             if (comment != null)
             {
                 return new DataResult<CommentDto>(ResultStatus.Success, new CommentDto
@@ -185,11 +181,11 @@ namespace BlogProject.Services.Concrete
         #region GetCommentUpdateDtoMethod
         public async Task<IDataResult<CommentUpdateDto>> GetCommentUpdateDtoAsync(int commentId)
         {
-            var result = await _unitOfWork.Comments.AnyAsync(c => c.Id == commentId);
+            var result = await UnitOfWork.Comments.AnyAsync(c => c.Id == commentId);
             if (result)
             {
-                var comment = await _unitOfWork.Comments.GetAsync(c => c.Id == commentId);
-                var commentUpdateDto = _mapper.Map<CommentUpdateDto>(comment);
+                var comment = await UnitOfWork.Comments.GetAsync(c => c.Id == commentId);
+                var commentUpdateDto = Mapper.Map<CommentUpdateDto>(comment);
                 return new DataResult<CommentUpdateDto>(ResultStatus.Success, commentUpdateDto);
             }
             else
@@ -202,11 +198,11 @@ namespace BlogProject.Services.Concrete
         #region HardDeleteMethod
         public async Task<IResult> HardDeleteAsync(int commentId)
         {
-            var comment = await _unitOfWork.Comments.GetAsync(c => c.Id == commentId);
+            var comment = await UnitOfWork.Comments.GetAsync(c => c.Id == commentId);
             if (comment != null)
             {
-                await _unitOfWork.Comments.DeleteAsync(comment);
-                await _unitOfWork.SaveChangesAsync();
+                await UnitOfWork.Comments.DeleteAsync(comment);
+                await UnitOfWork.SaveChangesAsync();
                 return new Result(ResultStatus.Success, Messages.Comment.CommentHardDeleted);
             }
             return new Result(ResultStatus.Error, Messages.Comment.CommentNotFound);
@@ -217,11 +213,11 @@ namespace BlogProject.Services.Concrete
         #region UpdateMethod
         public async Task<IDataResult<CommentDto>> UpdateAsync(CommentUpdateDto commentUpdateDto, string modifiedByName)
         {
-            var oldComment = await _unitOfWork.Comments.GetAsync(c => c.Id == commentUpdateDto.Id);
-            var comment = _mapper.Map<CommentUpdateDto, Comment>(commentUpdateDto, oldComment);
+            var oldComment = await UnitOfWork.Comments.GetAsync(c => c.Id == commentUpdateDto.Id);
+            var comment = Mapper.Map<CommentUpdateDto, Comment>(commentUpdateDto, oldComment);
             comment.ModifiedByName = modifiedByName;
-            var updatedComment = await _unitOfWork.Comments.UpdateAsync(comment);
-            await _unitOfWork.SaveChangesAsync();
+            var updatedComment = await UnitOfWork.Comments.UpdateAsync(comment);
+            await UnitOfWork.SaveChangesAsync();
             return new DataResult<CommentDto>(ResultStatus.Success, Messages.Comment.CommentUpdated, new CommentDto
             {
                 Comment = updatedComment,
