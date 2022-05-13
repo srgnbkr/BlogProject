@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlogProject.Entities.DTOs.CommentDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,8 @@ namespace BlogProject.Services.Constants
             public static string CommentUpdated => "Yorum Güncellendi";
             public static string CommentDeleted => "Yorum Silindi";
             public static string CommentHardDeleted => "Yorum veritabanından silindi";
+
+            public static string CommentApproved => "Yorum onaylandı";
         }
 
 

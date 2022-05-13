@@ -50,8 +50,8 @@ namespace BlogProject.MvcUI
             services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(opt =>
             {
-                opt.LoginPath = new PathString("/Admin/User/UserLogin");
-                opt.LogoutPath = new PathString("/Admin/User/Logout");
+                opt.LoginPath = new PathString("/Admin/Auth/Login");
+                opt.LogoutPath = new PathString("/Admin/Auth/Logout");
                 opt.Cookie = new CookieBuilder
                 {
                     Name = "BlogProject.Cookie",
@@ -61,7 +61,7 @@ namespace BlogProject.MvcUI
                 };
                 opt.SlidingExpiration = true;
                 opt.ExpireTimeSpan = TimeSpan.FromDays(7); // 7 Days ever 
-                opt.AccessDeniedPath = new PathString("/Admin/User/AccessDenied");
+                opt.AccessDeniedPath = new PathString("/Admin/Auth/AccessDenied");
             });
 
 

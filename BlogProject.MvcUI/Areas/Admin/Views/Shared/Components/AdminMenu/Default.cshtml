@@ -21,7 +21,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
                     Yorumlar
                 </a>
-                @if (Model.Roles.Any(r=>r.Equals("Admin")))
+                @if (Model.Roles.Any(r=>r.Equals("SuperAdmin")))
                 {
                     <div class="sb-sidenav-menu-heading">Kullanıcılar</div>
                     <a class="nav-link" asp-area="Admin" asp-controller="Role" asp-action="Index">

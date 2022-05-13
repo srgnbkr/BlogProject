@@ -6,6 +6,7 @@ using BlogProject.MvcUI.Helpers.Abstract;
 using BlogProject.Services.Abstract;
 using BlogProject.Shared.Utilities.Extensions;
 using BlogProject.Shared.Utilities.Results.ComplexTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,6 +19,7 @@ using System.Threading.Tasks;
 namespace BlogProject.MvcUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;

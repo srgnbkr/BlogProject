@@ -38,6 +38,8 @@ namespace BlogProject.Services.Concrete
                 Comment =  addedComment
             });
         }
+
+        
         #endregion
 
         #region CountMethod
@@ -90,7 +92,7 @@ namespace BlogProject.Services.Concrete
         #region GetAllMethod
         public async Task<IDataResult<CommentListDto>> GetAllAsync()
         {
-            var comments = await UnitOfWork.Comments.GetAllAsync();
+            var comments = await UnitOfWork.Comments.GetAllAsync(null,c => c.Article);
             if (comments.Count > -1)
             {
                 return new DataResult<CommentListDto>(ResultStatus.Success, new CommentListDto
@@ -109,7 +111,7 @@ namespace BlogProject.Services.Concrete
         #region GetAllByDeletedMethod
         public async Task<IDataResult<CommentListDto>> GetAllByDeletedAsync()
         {
-            var comments = await UnitOfWork.Comments.GetAllAsync(c => c.IsDeleted);
+            var comments = await UnitOfWork.Comments.GetAllAsync(c => c.IsDeleted, c => c.Article);
             if (comments.Count > -1)
             {
                 return new DataResult<CommentListDto>(ResultStatus.Success, new CommentListDto
@@ -127,7 +129,7 @@ namespace BlogProject.Services.Concrete
         #region GetAllByNonDeletedAndActiveMethod
         public async Task<IDataResult<CommentListDto>> GetAllByNonDeletedAndActiveAsync()
         {
-            var comments = await UnitOfWork.Comments.GetAllAsync(c => !c.IsDeleted && c.IsActive);
+            var comments = await UnitOfWork.Comments.GetAllAsync(c => !c.IsDeleted && c.IsActive, c => c.Article);
             if (comments.Count > -1)
             {
                 return new DataResult<CommentListDto>(ResultStatus.Success, new CommentListDto
@@ -145,7 +147,7 @@ namespace BlogProject.Services.Concrete
         #region GetAllByNonDeletedMethod
         public async Task<IDataResult<CommentListDto>> GetAllByNonDeletedAsync()
         {
-            var comments = await UnitOfWork.Comments.GetAllAsync(c => !c.IsDeleted);
+            var comments = await UnitOfWork.Comments.GetAllAsync(c => !c.IsDeleted,c=> c.Article);
             if (comments.Count > -1)
             {
                 return new DataResult<CommentListDto>(ResultStatus.Success, new CommentListDto
@@ -217,6 +219,7 @@ namespace BlogProject.Services.Concrete
             var comment = Mapper.Map<CommentUpdateDto, Comment>(commentUpdateDto, oldComment);
             comment.ModifiedByName = modifiedByName;
             var updatedComment = await UnitOfWork.Comments.UpdateAsync(comment);
+            updatedComment.Article = await UnitOfWork.Articles.GetAsync(c => c.Id == commentUpdateDto.ArticleId);
             await UnitOfWork.SaveChangesAsync();
             return new DataResult<CommentDto>(ResultStatus.Success, Messages.Comment.CommentUpdated, new CommentDto
             {
@@ -224,5 +227,27 @@ namespace BlogProject.Services.Concrete
             });
         }
         #endregion
+
+        #region ApproveMethod
+        public async Task<IDataResult<CommentDto>> ApproveAsync(int commentId, string modifiedByName)
+        {
+            var comment = await UnitOfWork.Comments.GetAsync(c => c.Id == commentId, c => c.Article);
+            if (comment is not null)
+            {
+                comment.IsActive = true;
+                comment.ModifiedByName = modifiedByName;
+                comment.ModifiedDate = DateTime.Now;
+                var updatedComment = await UnitOfWork.Comments.UpdateAsync(comment);
+                await UnitOfWork.SaveChangesAsync();
+                return new DataResult<CommentDto>(ResultStatus.Success, Messages.Comment.CommentApproved, new CommentDto
+                {
+                    Comment = updatedComment,
+                });
+            }
+            return new DataResult<CommentDto>(ResultStatus.Error, Messages.Comment.CommentNotFound, null);
+        }
+        #endregion
+
+
     }
 }

@@ -22,5 +22,7 @@ namespace BlogProject.Services.Abstract
         Task<IResult> HardDeleteAsync(int commentId);
         Task<IDataResult<int>> CountAsync();
         Task<IDataResult<int>> CountByNonDeletedAsync();
+
+        Task<IDataResult<CommentDto>> ApproveAsync(int commentId, string modifiedByName);
     }
 }
