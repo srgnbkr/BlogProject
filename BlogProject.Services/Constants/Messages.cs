@@ -9,6 +9,11 @@ namespace BlogProject.Services.Constants
 {
     public static class Messages
     {
+        public static class Role
+        {
+            public static string RoleAssign => "Rol Atama İşlemi Başarılı";
+        }
+
         public static class Category
         {
             public static string CategoryNotFound =>"Kategori bulunamadı";
