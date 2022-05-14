@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BlogProject.MvcUI.Helpers.Concrete
@@ -34,30 +35,9 @@ namespace BlogProject.MvcUI.Helpers.Concrete
 
 
         #region Methods
-        public  IDataResult<ImageDeletedDto> Delete(string pictureName)
-        {
-            var fileToDelete = Path.Combine($"{_wwwroot}/{imgFolder}/", pictureName);
-            if (System.IO.File.Exists(fileToDelete))
-            {
-                var fileInfo = new FileInfo(fileToDelete);
-                var imageDeletedDto = new ImageDeletedDto
-                {
-                    FullName = pictureName,
-                    Extensions = fileInfo.Extension,
-                    Path = fileInfo.FullName,
-                    Size = fileInfo.Length
-                };
-                System.IO.File.Delete(fileToDelete);
-                return new DataResult<ImageDeletedDto>(ResultStatus.Success, imageDeletedDto);
-            }
-            else
-            {
-                return new DataResult<ImageDeletedDto>(ResultStatus.Error, $"Böyle bir resim bulunamadı.", null);
-            }
-        }
-
         public async Task<IDataResult<UploadedImageDto>> Upload(string name, IFormFile pictureFile, PictureType pictureType, string folderName = null)
         {
+
             /* Eğer folderName değişkeni null gelir ise, o zaman resim tipine göre (PictureType) klasör adı ataması yapılır. */
             folderName ??= pictureType == PictureType.User ? userImagesFolder : postImagesFolder;
 
@@ -73,10 +53,15 @@ namespace BlogProject.MvcUI.Helpers.Concrete
             /* Resimin uzantısı fileExtension adlı değişkene atanır. */
             string fileExtension = Path.GetExtension(pictureFile.FileName);
 
+
+            Regex regex = new Regex("[*'\",._&#^@]");
+            name = regex.Replace(name, string.Empty);
+
+
             DateTime dateTime = DateTime.Now;
             /*
             // Parametre ile gelen değerler kullanılarak yeni bir resim adı oluşturulur.
-            // Örn: AlperTunga_587_5_38_12_3_10_2020.png
+            // Örn: Cuseg_587_5_38_12_3_10_2020.png
             */
             string newFileName = $"{name}_{dateTime.FullDateAndTimeStringWithUnderscore()}{fileExtension}";
 
@@ -104,6 +89,29 @@ namespace BlogProject.MvcUI.Helpers.Concrete
                 Size = pictureFile.Length
             });
         }
+
+        public IDataResult<ImageDeletedDto> Delete(string pictureName)
+        {
+            var fileToDelete = Path.Combine($"{_wwwroot}/{imgFolder}/", pictureName);
+            if (System.IO.File.Exists(fileToDelete))
+            {
+                var fileInfo = new FileInfo(fileToDelete);
+                var imageDeletedDto = new ImageDeletedDto
+                {
+                    FullName = pictureName,
+                    Extensions = fileInfo.Extension,
+                    Path = fileInfo.FullName,
+                    Size = fileInfo.Length
+                };
+                System.IO.File.Delete(fileToDelete);
+                return new DataResult<ImageDeletedDto>(ResultStatus.Success, imageDeletedDto);
+            }
+            else
+            {
+                return new DataResult<ImageDeletedDto>(ResultStatus.Error, $"Böyle bir resim bulunamadı.", null);
+            }
+        }
+
         #endregion
     }
 }

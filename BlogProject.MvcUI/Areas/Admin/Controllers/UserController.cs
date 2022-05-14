@@ -150,12 +150,18 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
 
         #region UserDelete
         [Authorize(Roles = "SuperAdmin")]
+        [HttpPost]
         public async Task<JsonResult> Delete(int userId)
         {
             var user = await UserManager.FindByIdAsync(userId.ToString());
             var result = await UserManager.DeleteAsync(user);
             if (result.Succeeded)
             {
+                if (user.Picture != "userImages/defaultUser.png")
+                {
+                    ImageHelper.Delete(user.Picture);
+                }
+
                 var deletedUser = JsonSerializer.Serialize(new UserDto
                 {
                     ResultStatus = ResultStatus.Success,
