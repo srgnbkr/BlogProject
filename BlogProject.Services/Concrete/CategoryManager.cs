@@ -122,6 +122,24 @@ namespace BlogProject.Services.Concrete
                 return new DataResult<int>(ResultStatus.Error, Messages.Category.CategoryNotFound, -1);
         }
 
+        public async Task<IDataResult<CategoryListDto>> GetAllByDeletedAsync()
+        {
+            var categories = await UnitOfWork.Categories.GetAllAsync(c => c.IsDeleted);
+            if(categories.Count > -1)
+                return new DataResult<CategoryListDto>(ResultStatus.Success, new CategoryListDto
+                {
+                    Categories = categories,
+                    ResultStatus = ResultStatus.Success
+                });
+            
+            return new DataResult<CategoryListDto>(ResultStatus.Error, Messages.Category.CategoryNotFound, new CategoryListDto
+            {
+                Categories = null,
+                ResultStatus = ResultStatus.Error,
+                Message = Messages.Category.CategoryNotFound
+            });
+        }
+
         #endregion
 
         #region CommandMethods
@@ -166,6 +184,7 @@ namespace BlogProject.Services.Concrete
             if (category != null)
             {
                 category.IsDeleted = true;
+                category.IsActive = false;
                 category.ModifiedDate = DateTime.Now;
                 category.ModifiedByName = modifiedByName;
                 var deletedCategory = await UnitOfWork.Categories.UpdateAsync(category);
@@ -206,6 +225,36 @@ namespace BlogProject.Services.Concrete
                 return new DataResult<int>(ResultStatus.Success, categoriesCount);
             else
                 return new DataResult<int>(ResultStatus.Error, Messages.Category.CategoryNotFound, -1);
+        }
+
+        
+
+        public async Task<IDataResult<CategoryDto>> UndoDeleteAsync(int categoryId, string modifiedByName)
+        {
+            var category = await UnitOfWork.Categories.GetAsync(c => c.Id == categoryId);
+            if (category != null)
+            {
+                category.IsDeleted = false;
+                category.IsActive = true;
+                category.ModifiedDate = DateTime.Now;
+                category.ModifiedByName = modifiedByName;
+                var deletedCategory = await UnitOfWork.Categories.UpdateAsync(category);
+                await UnitOfWork.SaveChangesAsync();
+
+                return new DataResult<CategoryDto>(ResultStatus.Success, Messages.Category.CategoryDeleted, new CategoryDto
+                {
+                    Category = deletedCategory,
+                    ResultStatus = ResultStatus.Success,
+                    Message = Messages.Category.CategoryUndoDeleted
+                });
+
+            }
+            return new DataResult<CategoryDto>(ResultStatus.Error, Messages.Category.CategoryNotFound, new CategoryDto
+            {
+                Category = null,
+                ResultStatus = ResultStatus.Error,
+                Message = Messages.Category.CategoryNotFound
+            });
         }
 
 

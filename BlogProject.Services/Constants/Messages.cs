@@ -21,6 +21,8 @@ namespace BlogProject.Services.Constants
             public static string CategoryUpdated => "Kategori başarıyla güncellendi";
             public static string CategoryDeleted => "Kategori başarıyla silindi";
             public static string CategoryHardDeleted => "Kategori başarıyla veritabanından silindi";
+
+            public static string CategoryUndoDeleted => "Kategori arşivden geri getirildi";
         }
 
         public static class Articles
@@ -38,6 +40,7 @@ namespace BlogProject.Services.Constants
             public static string CommentAdded => "Yorum Eklendi";
             public static string CommentUpdated => "Yorum Güncellendi";
             public static string CommentDeleted => "Yorum Silindi";
+            public static string CommentUndoDeleted => "Yorum arşivden geri getirildi";
             public static string CommentHardDeleted => "Yorum veritabanından silindi";
 
             public static string CommentApproved => "Yorum onaylandı";

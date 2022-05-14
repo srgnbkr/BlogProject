@@ -22,12 +22,15 @@ namespace BlogProject.Services.Abstract
         Task<IDataResult<CategoryUpdateDto>> GetCategoryUpdateDto(int categoryId);
         Task<IDataResult<int>> Count();
         Task<IDataResult<int>> CountByNonDeleted();
+
+        Task<IDataResult<CategoryListDto>> GetAllByDeletedAsync();
         #endregion
 
         #region Command Methods
         Task<IDataResult<CategoryDto>> AddAsync(CategoryAddDto categoryAddDto, string createdByName);
         Task<IDataResult<CategoryDto>> UpdateAsync(CategoryUpdateDto categoryUpdateDto, string modifiedByName);
         Task<IDataResult<CategoryDto>> DeleteAsync(int categoryId, string modifiedByName);
+        Task<IDataResult<CategoryDto>> UndoDeleteAsync(int categoryId, string modifiedByName);
         Task<IResult> HardDeleteAsync(int categoryId);        
 
         #endregion

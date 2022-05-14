@@ -22,11 +22,20 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
     [Authorize(Roles = "SuperAdmin")]
     public class CategoryController : BaseController
     {
+
+        #region Variables
         private readonly ICategoryService _categoryService;
+        #endregion
+
+        #region Constructor
         public CategoryController(ICategoryService categoryService,UserManager<User> userManager,IMapper mapper,IImageHelper imageHelper) :base(userManager,mapper,imageHelper)
         {
             _categoryService = categoryService;
         }
+        #endregion
+
+
+        #region Index
         public async Task<IActionResult> Index()
         {
             var result = await _categoryService.GetAllByNonDeletedAsync();
@@ -34,7 +43,10 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
 
 
         }
+        #endregion
 
+
+        #region Add
         [HttpGet]
         public IActionResult Add()
         {
@@ -64,8 +76,9 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             return Json(categoryAddAjaxErrorModel);
 
         }
+        #endregion
 
-
+        #region GetAllCategory
         public async Task<JsonResult> GetAllCategory()
         {
             var result = await _categoryService.GetAllAsync();
@@ -75,14 +88,20 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             });
             return Json(categoires);
         }
+        #endregion
 
+
+        #region Delete
+        [HttpPost]
         public async Task<JsonResult> Delete(int categoryId)
         {
             var result = await _categoryService.DeleteAsync(categoryId, LoggedInUser.UserName);
             var deletedCategory = JsonSerializer.Serialize(result.Data);
             return Json(deletedCategory);
         }
+        #endregion
 
+        #region GetAllByNonDeleted
         public async Task<JsonResult> GetAllCategories()
         {
             var result = await _categoryService.GetAllByNonDeletedAsync();
@@ -92,14 +111,18 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             });
             return Json(categories);
         }
+        #endregion
 
+
+
+        #region Update
         [HttpGet]
         public async Task<IActionResult> Update(int categoryId)
         {
             var result = await _categoryService.GetCategoryUpdateDto(categoryId);
-            if (result.ResultStatus==ResultStatus.Success)
+            if (result.ResultStatus == ResultStatus.Success)
             {
-                return PartialView("_CategoryUpdatePartial",result.Data);
+                return PartialView("_CategoryUpdatePartial", result.Data);
             }
             else
             {
@@ -129,13 +152,60 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             return Json(categoryUpdateAjaxErrorModel);
 
         }
+        #endregion
+
+        #region DeletedCategories
+        [HttpGet]
+        public async Task<IActionResult> DeletedCategories()
+        {
+            var result = await _categoryService.GetAllByDeletedAsync();
+            return View(result.Data);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAllDeletedCategories()
+        {
+            var result = await _categoryService.GetAllByDeletedAsync();
+            var categories = JsonSerializer.Serialize(result.Data, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(categories);
+        }
+
+
+
+        #endregion
+
+        #region UndoDelete
+        [HttpPost]
+        public async Task<JsonResult> UndoDelete(int categoryId)
+        {
+            var result = await _categoryService.UndoDeleteAsync(categoryId, LoggedInUser.UserName);
+            var undoDeletedCategory = JsonSerializer.Serialize(result.Data);
+            return Json(undoDeletedCategory);
+        }
+        #endregion
+
+        #region HardDelete
+        [HttpPost]
+        public async Task<JsonResult> HardDelete(int categoryId)
+        {
+            var result = await _categoryService.HardDeleteAsync(categoryId);
+            var deletedCategory = JsonSerializer.Serialize(result);
+            return Json(deletedCategory);
+        }
+        #endregion
 
 
 
 
-        
 
-        
+
+
+
+
+
 
     }
 }

@@ -6,6 +6,7 @@ using BlogProject.MvcUI.Areas.Admin.Models.ArticleModels;
 using BlogProject.MvcUI.Helpers.Abstract;
 using BlogProject.Services.Abstract;
 using BlogProject.Shared.Utilities.Results.ComplexTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
@@ -189,6 +190,49 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             });
             return Json(articleResult);
 
+        }
+        #endregion
+
+        #region DeletedArticles
+        [HttpGet]
+        public async Task<IActionResult> DeletedArticles()
+        {
+            var result = await _articleService.GetAllByDeletedAsync();
+            return View(result.Data);
+
+        }
+        [Authorize(Roles = "SuperAdmin,Article.Read")]
+        [HttpGet]
+        public async Task<JsonResult> GetAllDeletedArticles()
+        {
+            var result = await _articleService.GetAllByDeletedAsync();
+            var articles = JsonSerializer.Serialize(result, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(articles);
+        }
+        #endregion
+
+        #region UndoDelete
+        [Authorize(Roles = "SuperAdmin,Article.Update")]
+        [HttpPost]
+        public async Task<JsonResult> UndoDelete(int articleId)
+        {
+            var result = await _articleService.UndoDeleteAsync(articleId, LoggedInUser.UserName);
+            var undoDeleteArticleResult = JsonSerializer.Serialize(result);
+            return Json(undoDeleteArticleResult);
+        }
+        #endregion
+
+        #region HardDelete
+        [Authorize(Roles = "SuperAdmin,Article.Delete")]
+        [HttpPost]
+        public async Task<JsonResult> HardDelete(int articleId)
+        {
+            var result = await _articleService.HardDeleteAsync(articleId);
+            var hardDeletedArticleResult = JsonSerializer.Serialize(result);
+            return Json(hardDeletedArticleResult);
         }
         #endregion
 

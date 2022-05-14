@@ -118,5 +118,58 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
             return Json(commentResult);
         }
         #endregion
+
+        #region DeletedComments
+
+        [HttpGet]
+        public async Task<IActionResult> DeletedComments()
+        {
+            var result = await _commentService.GetAllByDeletedAsync();
+            return View(result.Data);
+
+        }
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpGet]
+        public async Task<JsonResult> GetAllDeletedComments()
+        {
+            var result = await _commentService.GetAllByDeletedAsync();
+            var comments = JsonSerializer.Serialize(result, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(comments);
+        }
+        #endregion
+
+        #region UndoDelete
+        
+        [HttpPost]
+        public async Task<JsonResult> UndoDelete(int commentId)
+        {
+            var result = await _commentService.UndoDeleteAsync(commentId, LoggedInUser.UserName);
+            var undoDeleteCommentResult = JsonSerializer.Serialize(result);
+            return Json(undoDeleteCommentResult);
+        }
+        #endregion
+
+        #region HardDelete
+        [HttpPost]
+        public async Task<JsonResult> HardDelete(int commentId)
+        {
+            var result = await _commentService.HardDeleteAsync(commentId);
+            var hardDeletedCommentResult = JsonSerializer.Serialize(result);
+            return Json(hardDeletedCommentResult);
+        }
+        #endregion
+
+        #region Delete
+        [HttpPost]
+        public async Task<JsonResult> Delete(int commentId)
+        {
+            var result = await _commentService.DeleteAsync(commentId, LoggedInUser.UserName);
+            var commentResult = JsonSerializer.Serialize(result);
+            return Json(commentResult);
+        }
+        #endregion
     }
 }

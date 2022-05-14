@@ -73,6 +73,7 @@ namespace BlogProject.Services.Concrete
             if (comment != null)
             {
                 comment.IsDeleted = true;
+                comment.IsActive = false;
                 comment.ModifiedByName = modifiedByName;
                 comment.ModifiedDate = DateTime.Now;
                 var deletedComment = await UnitOfWork.Comments.UpdateAsync(comment);
@@ -246,6 +247,29 @@ namespace BlogProject.Services.Concrete
             }
             return new DataResult<CommentDto>(ResultStatus.Error, Messages.Comment.CommentNotFound, null);
         }
+
+
+        #endregion
+
+        #region UndoDeleteMethod
+        public async Task<IDataResult<CommentDto>> UndoDeleteAsync(int commentId, string modifiedByName)
+        {
+            var comment = await UnitOfWork.Comments.GetAsync(x => x.Id == commentId);
+            if (comment != null)
+            {
+                comment.IsDeleted = false;
+                comment.IsActive = true;
+                comment.ModifiedByName = modifiedByName;
+                comment.ModifiedDate = DateTime.Now;
+                var deletedComment = await UnitOfWork.Comments.UpdateAsync(comment);
+                await UnitOfWork.SaveChangesAsync();
+                return new DataResult<CommentDto>(ResultStatus.Success, Messages.Comment.CommentUndoDeleted, new CommentDto
+                {
+                    Comment = deletedComment
+                });
+            }
+            return new DataResult<CommentDto>(ResultStatus.Error, Messages.Comment.CommentNotFound, new CommentDto { Comment = null });
+        }        
         #endregion
 
 

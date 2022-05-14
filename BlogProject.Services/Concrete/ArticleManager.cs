@@ -63,6 +63,7 @@ namespace BlogProject.Services.Concrete
             {
                 var article = await UnitOfWork.Articles.GetAsync(a => a.Id == articleId);
                 article.IsDeleted = true;
+                article.IsActive = false;
                 article.ModifiedByName = modifiedByName;
                 article.ModifiedDate = DateTime.Now;
                 await UnitOfWork.Articles.UpdateAsync(article);
@@ -106,6 +107,22 @@ namespace BlogProject.Services.Concrete
                 return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Articles.ArticleNotFound, null);
             }
             return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Category.CategoryNotFound, null);
+        }
+
+        public async Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync()
+        {
+            var articles = await UnitOfWork.Articles.GetAllAsync(x => x.IsDeleted, a => a.User, a => a.Category);
+
+            if (articles.Count > -1)
+            {
+                return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
+                {
+                    Articles = articles,
+                    ResultStatus = ResultStatus.Success
+                });
+
+            }
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Articles.ArticleNotFound, null);
         }
 
         public async Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActiveAsync()
@@ -176,6 +193,23 @@ namespace BlogProject.Services.Concrete
                 await UnitOfWork.Articles.DeleteAsync(article);
                 await UnitOfWork.SaveChangesAsync();
                 return new Result(ResultStatus.Success, Messages.Articles.ArticleHardDeleted);
+            }
+            return new Result(ResultStatus.Error, Messages.Articles.ArticleNotFound);
+        }
+
+        public async Task<IResult> UndoDeleteAsync(int articleId, string modifiedByName)
+        {
+            var result = await UnitOfWork.Articles.AnyAsync(a => a.Id == articleId);
+            if (result)
+            {
+                var article = await UnitOfWork.Articles.GetAsync(a => a.Id == articleId);
+                article.IsDeleted = false;
+                article.IsActive = true;
+                article.ModifiedByName = modifiedByName;
+                article.ModifiedDate = DateTime.Now;
+                await UnitOfWork.Articles.UpdateAsync(article);
+                await UnitOfWork.SaveChangesAsync();
+                return new Result(ResultStatus.Success, Messages.Articles.ArticleDeleted);
             }
             return new Result(ResultStatus.Error, Messages.Articles.ArticleNotFound);
         }

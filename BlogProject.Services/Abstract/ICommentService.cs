@@ -24,5 +24,8 @@ namespace BlogProject.Services.Abstract
         Task<IDataResult<int>> CountByNonDeletedAsync();
 
         Task<IDataResult<CommentDto>> ApproveAsync(int commentId, string modifiedByName);
+        Task<IDataResult<CommentDto>> UndoDeleteAsync(int commentId, string modifiedByName);
+
+
     }
 }

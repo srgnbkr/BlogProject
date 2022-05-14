@@ -4,6 +4,7 @@ using BlogProject.DataAccess.Concrete.EntityFramework.Context;
 using BlogProject.Entities.Concrete;
 using BlogProject.Services.Abstract;
 using BlogProject.Services.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -39,7 +40,9 @@ namespace BlogProject.Services.Extensions
                 #endregion
 
             }).AddEntityFrameworkStores<BlogProjectDbContext>();
-            
+
+            serviceCollection.Configure<SecurityStampValidatorOptions>(options => { options.ValidationInterval = TimeSpan.FromMinutes(15); });
+
             serviceCollection.AddScoped<IUnitOfWork,UnitOfWork>();
 
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
