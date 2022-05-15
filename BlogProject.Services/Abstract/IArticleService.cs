@@ -17,6 +17,7 @@ namespace BlogProject.Services.Abstract
         Task<IDataResult<int>> Count();
         Task<IDataResult<int>> CountByNonDeleted();
         Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync();
+        Task<IDataResult<ArticleListDto>> GetAllByViewCountAsync(bool isAscending, int? takeSize);
         #endregion
 
         #region CommandMethods

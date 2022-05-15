@@ -8,6 +8,7 @@ using BlogProject.Shared.Utilities.Results.Abstract;
 using BlogProject.Shared.Utilities.Results.ComplexTypes;
 using BlogProject.Shared.Utilities.Results.Concrete;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlogProject.Services.Concrete
@@ -155,6 +156,28 @@ namespace BlogProject.Services.Concrete
             
             }
             return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Articles.ArticleNotFound, null);
+
+        }
+
+        /// <summary>
+        /// Get article view count 
+        /// </summary>
+        /// <param name="isAscending"></param>
+        /// <param name="takeSize"></param>
+        /// <returns></returns>
+        public async Task<IDataResult<ArticleListDto>> GetAllByViewCountAsync(bool isAscending, int? takeSize)
+        {
+            var articles = await UnitOfWork.Articles.GetAllAsync(x => !x.IsDeleted && x.IsActive, a => a.User, a => a.Category);
+            
+            var sortedArticles = isAscending 
+                ? articles.OrderBy(x => x.ViewCount) 
+                : articles.OrderByDescending(x => x.ViewCount);
+
+            return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
+            {
+                Articles = takeSize == null ? sortedArticles.ToList() : sortedArticles.Take(takeSize.Value).ToList()
+                
+            });
 
         }
 
