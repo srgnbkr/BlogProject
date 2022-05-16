@@ -1,4 +1,5 @@
-﻿using BlogProject.Services.Abstract;
+﻿using BlogProject.MvcUI.Models;
+using BlogProject.Services.Abstract;
 using BlogProject.Shared.Utilities.Results.ComplexTypes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -15,9 +16,17 @@ namespace BlogProject.MvcUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Search(string keyword,int currentPage=1,int pageSize=5, bool isAscending=false)
         {
-            return View();
+            var searchResult = await _articleService.SearchAsync(keyword, currentPage, pageSize, isAscending);
+            if (searchResult.ResultStatus == ResultStatus.Success)
+                return View(new ArticleSearchViewModel
+                {
+                    ArticleListDto = searchResult.Data,
+                    Keyword = keyword,
+                });
+            return NotFound();
+            
         }
         
         [HttpGet]

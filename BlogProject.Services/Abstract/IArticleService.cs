@@ -15,6 +15,9 @@ namespace BlogProject.Services.Abstract
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActiveAsync();
         Task<IDataResult<ArticleListDto>> GetAllByCategoryAsync(int categoryId);
         Task<IDataResult<ArticleListDto>> GetAllByPagingAsync(int? categoryId, int currentPage = 1, int pageSize = 5, bool isAscending = false);
+        
+        Task<IDataResult<ArticleListDto>> SearchAsync(string keyword,  int currentPage = 1, int pageSize = 5, bool isAscending = false);
+
         Task<IDataResult<int>> Count();
         Task<IDataResult<int>> CountByNonDeleted();
         Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync();
