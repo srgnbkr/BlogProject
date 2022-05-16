@@ -224,10 +224,16 @@ namespace BlogProject.Services.Concrete
 
         public async Task<IDataResult<ArticleDto>> GetAsync(int articleId)
         {
-            var data = await UnitOfWork.Articles.GetAsync(x => x.Id == articleId, x => x.User, x => x.Category, x => x.Comments);
-            if (data is not null)
+            var article = await UnitOfWork.Articles.GetAsync(x => x.Id == articleId, x => x.User, x => x.Category);
+            
+            if (article != null)
+            {
+                article.Comments = await UnitOfWork.Comments.GetAllAsync(x => x.ArticleId == articleId && !x.IsDeleted && x.IsActive);
                 return new DataResult<ArticleDto>
-                    (ResultStatus.Success, new ArticleDto {Article=data,ResultStatus = ResultStatus.Success });
+                        (ResultStatus.Success, new ArticleDto { Article = article, ResultStatus = ResultStatus.Success });
+            }
+                
+            
             return new DataResult<ArticleDto>(ResultStatus.Error,Messages.Articles.ArticleNotFound, null);
         } 
 
