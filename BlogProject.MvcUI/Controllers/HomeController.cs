@@ -17,14 +17,19 @@ namespace BlogProject.MvcUI.Controllers
         }
         #endregion
 
+        
 
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId,int currentPage = 1,int pageSize=5)
         {
-            var result = await _articleService.GetAllByNonDeletedAndActiveAsync();
+
+            var result = await (categoryId == null
+                ? _articleService.GetAllByPagingAsync(null, currentPage, pageSize)
+                : _articleService.GetAllByPagingAsync(categoryId.Value, currentPage, pageSize));
+
             return View(result.Data);
+
         }
 
-      
+
     }
 }

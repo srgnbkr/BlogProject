@@ -159,6 +159,26 @@ namespace BlogProject.Services.Concrete
 
         }
 
+        public async Task<IDataResult<ArticleListDto>> GetAllByPagingAsync(int? categoryId, int currentPage = 1, int pageSize = 5, bool isAscending = false)
+        {
+            var articles = categoryId == null
+                ? await UnitOfWork.Articles.GetAllAsync(x => x.IsActive && !x.IsDeleted, x => x.User, x=>x.Category)
+                : await UnitOfWork.Articles.GetAllAsync(x => x.CategoryId == categoryId && x.IsActive && !x.IsDeleted, x => x.User, x => x.Category);
+
+            var sortedArticles = isAscending
+                ? articles.OrderBy(x => x.Date).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
+                : articles.OrderByDescending(x => x.Date).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+            return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
+            {
+                Articles = sortedArticles,
+                CategoryId = categoryId == null ? null : categoryId.Value,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count
+            });
+        }
+
         /// <summary>
         /// Get article view count 
         /// </summary>
@@ -200,7 +220,7 @@ namespace BlogProject.Services.Concrete
 
         public async Task<IDataResult<ArticleDto>> GetAsync(int articleId)
         {
-            var data = await UnitOfWork.Articles.GetAsync(x => x.Id == articleId, x => x.User, x => x.Category);
+            var data = await UnitOfWork.Articles.GetAsync(x => x.Id == articleId, x => x.User, x => x.Category, x => x.Comments);
             if (data is not null)
                 return new DataResult<ArticleDto>
                     (ResultStatus.Success, new ArticleDto {Article=data,ResultStatus = ResultStatus.Success });

@@ -11,5 +11,7 @@ namespace BlogProject.Entities.DTOs.ArticleDto
     public class ArticleListDto : DtoGetBase
     {
         public IList<Article> Articles { get; set; }
+        public int? CategoryId { get; set; }
+
     }
 }
