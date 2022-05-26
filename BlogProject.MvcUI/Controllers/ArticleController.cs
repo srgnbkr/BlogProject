@@ -34,7 +34,11 @@ namespace BlogProject.MvcUI.Controllers
         {
             var result = await _articleService.GetAsync(articleId);
             if (result.ResultStatus == ResultStatus.Success)
+            {
+                await _articleService.IncreaseViewCountAsync(articleId);
                 return View(result.Data);
+            }
+                
            
             return NotFound();
 

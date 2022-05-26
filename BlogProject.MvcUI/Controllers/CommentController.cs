@@ -5,6 +5,7 @@ using BlogProject.Shared.Utilities.Extensions;
 using BlogProject.Shared.Utilities.Results.ComplexTypes;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BlogProject.MvcUI.Controllers
@@ -32,6 +33,10 @@ namespace BlogProject.MvcUI.Controllers
                     {
                         CommentDto = result.Data,
                         CommentAddPartial = await this.RenderViewToStringAsync("_CommentAddPartial", commentAddDto)
+                    },
+                    new JsonSerializerOptions
+                    { 
+                        ReferenceHandler = ReferenceHandler.Preserve 
                     });
                     return Json(commentAddAjaxViewModel);
                 }

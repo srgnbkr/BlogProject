@@ -1,4 +1,5 @@
-﻿@model BlogProject.Entities.DTOs.ArticleDto.ArticleDto
+﻿@using BlogProject.Entities.DTOs.CommentDto
+@model BlogProject.Entities.DTOs.ArticleDto.ArticleDto
 
 @{
     Layout = "_ArticleLayout";
@@ -35,7 +36,7 @@
     <p class="text-center">Okunma Sayısı: <span class="badge badge-info">@Model.Article.ViewCount</span> Yorum Sayısı: <span class="badge badge-warning">@Model.Article.CommentCount</span></p>
 
     <!-- Comments Form -->
-    <partial name="~/Views/Comment/_CommentAddPartial.cshtml" />
+    <partial name="~/Views/Comment/_CommentAddPartial.cshtml" model="new CommentAddDto{ArticleId = Model.Article.Id}" />
 
     <div id="comments">
         @foreach (var comment in Model.Article.Comments)
@@ -51,3 +52,7 @@
         }
     </div>
 </div>
+
+@section Scripts{
+    <script src="~/BlogHome/js/articleDetail.js" type="text/ecmascript"></script>
+}

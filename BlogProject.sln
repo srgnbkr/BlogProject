@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogProject.Entities", "Blo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogProject.Services", "BlogProject.Services\BlogProject.Services.csproj", "{A6679530-E312-4EE5-9A94-E1365D8AED93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogProject.MvcUI", "BlogProject.MvcUI\BlogProject.MvcUI.csproj", "{7B07C0EB-7D8D-43FE-8D4C-BDE4B80FE01E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogProject.MvcUI", "BlogProject.MvcUI\BlogProject.MvcUI.csproj", "{7B07C0EB-7D8D-43FE-8D4C-BDE4B80FE01E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -34,7 +34,7 @@ namespace BlogProject.MvcUI.Areas.Admin.Controllers
 
         
         [Area("Admin")]
-        [Authorize(Roles = "SuperAdmin,Editor")]
+        [Authorize(Roles = "SuperAdmin,Editor,AdminArea.Home.Read")]
         public async Task<IActionResult> Index() 
         {
             var categoriesCountResult = await _categoryService.CountByNonDeleted();

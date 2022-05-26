@@ -1,5 +1,7 @@
-﻿using BlogProject.Entities.DTOs.ArticleDto;
+﻿using BlogProject.Entities.ComplexTypes;
+using BlogProject.Entities.DTOs.ArticleDto;
 using BlogProject.Shared.Utilities.Results.Abstract;
+using System;
 using System.Threading.Tasks;
 
 namespace BlogProject.Services.Abstract
@@ -18,10 +20,16 @@ namespace BlogProject.Services.Abstract
         
         Task<IDataResult<ArticleListDto>> SearchAsync(string keyword,  int currentPage = 1, int pageSize = 5, bool isAscending = false);
 
+        Task<IResult> IncreaseViewCountAsync(int articleId);
+
         Task<IDataResult<int>> Count();
         Task<IDataResult<int>> CountByNonDeleted();
         Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync();
         Task<IDataResult<ArticleListDto>> GetAllByViewCountAsync(bool isAscending, int? takeSize);
+        Task<IDataResult<ArticleListDto>> GetAllByUserIdOnFilter(int userId, FilterBy filterBy, OrderBy orderBy,
+            bool isAscending, int takeSize, int categoryId, DateTime startAt, DateTime endAt, int minViewCount,
+            int maxViewCount, int minCommentCount, int maxCommentCount);
+
         #endregion
 
         #region CommandMethods
