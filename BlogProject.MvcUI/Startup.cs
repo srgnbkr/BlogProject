@@ -1,3 +1,4 @@
+using BlogProject.Entities.Concrete;
 using BlogProject.MvcUI.AutoMapper.Profiles;
 using BlogProject.MvcUI.Helpers.Abstract;
 using BlogProject.MvcUI.Helpers.Concrete;
@@ -30,7 +31,7 @@ namespace BlogProject.MvcUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.Configure<AboutAsPageInfo>(Configuration.GetSection("AboutAsPageInfo"));
             services.AddControllersWithViews(options => 
             {
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(

@@ -319,7 +319,7 @@ namespace BlogProject.Services.Concrete
         public async Task<IResult> UndoDeleteAsync(int articleId, string modifiedByName)
         {
             var result = await UnitOfWork.Articles.AnyAsync(a => a.Id == articleId);
-            if (result)
+            if (!result) return new Result(ResultStatus.Error, Messages.Articles.ArticleNotFound);
             {
                 var article = await UnitOfWork.Articles.GetAsync(a => a.Id == articleId);
                 article.IsDeleted = false;
@@ -330,7 +330,6 @@ namespace BlogProject.Services.Concrete
                 await UnitOfWork.SaveChangesAsync();
                 return new Result(ResultStatus.Success, Messages.Articles.ArticleDeleted);
             }
-            return new Result(ResultStatus.Error, Messages.Articles.ArticleNotFound);
         }
 
         public async Task<IResult> UpdateAsync(ArticleUpdateDto articleUpdateDto, string modifiedByName)
@@ -383,6 +382,8 @@ namespace BlogProject.Services.Concrete
                                 : userArticles.Where(a => a.CategoryId == categoryId).Take(takeSize)
                                     .OrderByDescending(a => a.CommentCount).ToList();
                             break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(orderBy), orderBy, null);
                     }
                     break;
                 case FilterBy.Date:
@@ -472,6 +473,8 @@ namespace BlogProject.Services.Concrete
                     }
 
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(filterBy), filterBy, null);
             }
 
             return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto

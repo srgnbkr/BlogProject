@@ -1,7 +1,9 @@
-﻿using BlogProject.MvcUI.Models;
+﻿using BlogProject.Entities.ComplexTypes;
+using BlogProject.MvcUI.Models;
 using BlogProject.Services.Abstract;
 using BlogProject.Shared.Utilities.Results.ComplexTypes;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace BlogProject.MvcUI.Controllers
@@ -35,8 +37,30 @@ namespace BlogProject.MvcUI.Controllers
             var result = await _articleService.GetAsync(articleId);
             if (result.ResultStatus == ResultStatus.Success)
             {
+                var userArticles = await _articleService.GetAllByUserIdOnFilter(
+                    result.Data.Article.UserId,
+                    FilterBy.Category,
+                    OrderBy.Date,
+                    false,
+                    10,
+                    result.Data.Article.CategoryId,
+                    DateTime.Now,
+                    DateTime.Now,
+                    0,
+                    99999,
+                    0,
+                    99999
+                    );
                 await _articleService.IncreaseViewCountAsync(articleId);
-                return View(result.Data);
+                return View(new ArticleDetailViewModel { 
+                    ArticleDto = result.Data,
+                    ArticleDetailRighSideBarViewModel = new ArticleDetailRighSideBarViewModel
+                    {
+                        ArticleListDto = userArticles.Data,
+                        Header = "Popüler Makaleler",
+                        User = result.Data.Article.User
+                    }
+                });
             }
                 
            
