@@ -1,5 +1,6 @@
 using BlogProject.Entities.Concrete;
 using BlogProject.MvcUI.AutoMapper.Profiles;
+using BlogProject.MvcUI.Filters;
 using BlogProject.MvcUI.Helpers.Abstract;
 using BlogProject.MvcUI.Helpers.Concrete;
 using BlogProject.Services.Extensions;
@@ -36,6 +37,7 @@ namespace BlogProject.MvcUI
             {
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
                     value => "Bu Alan Boþ Geçilmemelidir");
+                options.Filters.Add<MvcExceptionFilter>();
             }).AddRazorRuntimeCompilation().AddJsonOptions(opt =>
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

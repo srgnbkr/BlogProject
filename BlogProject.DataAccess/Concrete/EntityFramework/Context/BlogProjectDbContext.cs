@@ -15,7 +15,7 @@ namespace BlogProject.DataAccess.Concrete.EntityFramework.Context
         public DbSet<Article> Articles { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
-
+        public DbSet<Log> Logs { get; set; }
 
         public BlogProjectDbContext(DbContextOptions<BlogProjectDbContext> options) : base(options)
         {
@@ -38,6 +38,7 @@ namespace BlogProject.DataAccess.Concrete.EntityFramework.Context
             modelBuilder.ApplyConfiguration(new UserLoginMap());
             modelBuilder.ApplyConfiguration(new UserRoleMap());
             modelBuilder.ApplyConfiguration(new UserTokenMap());
+            modelBuilder.ApplyConfiguration(new LogMap());
         }
 
 

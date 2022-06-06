@@ -15,40 +15,27 @@
 
   <!-- Custom styles for this template -->
   <link href="~/BlogHome/css/blog-home.css" rel="stylesheet">
+  <link href="~/BlogHome/css/error-page-bg-animation.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 </head>
 
-<body>
+<body class="wrapper">
+    <div id="layoutError">
+            <div id="layoutError_content">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                         @RenderBody()
+                        </div>
+                    </div>
+                </main>
+            </div>
+            
+        </div>
 
-  <!-- Navigation -->
-  <partial name="_MainMenuPartial" />  
  
-
-  <!-- Page Content -->
-  <div class="container">
-
-    <div class="row">
-
-      <!-- Blog Entries Column -->
-      @RenderBody()
-
-      <!-- Sidebar Widgets Column -->
-      @await Component.InvokeAsync("RightSideBar")
-
-    </div>
-    <!-- /.row -->
-
-  </div>
-  <!-- /.container -->
-
-  <!-- Footer -->
-  <footer class="py-5 bg-dark">
-    <div class="container">
-      <p class="m-0 text-center text-white">Tüm Hakları Saklıdır &copy; BlogProject @DateTime.Now.Year</p>
-    </div>
-    <!-- /.container -->
-  </footer>
+  
 
   <!-- Bootstrap core JavaScript -->
   <script src="~/BlogHome/vendor/jquery/jquery.min.js"></script>

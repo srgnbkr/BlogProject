@@ -1,7 +1,9 @@
 ﻿using BlogProject.Entities.Concrete;
+using BlogProject.Entities.DTOs.EmailDto;
 using BlogProject.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading.Tasks;
 
 namespace BlogProject.MvcUI.Controllers
@@ -35,14 +37,28 @@ namespace BlogProject.MvcUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> About()
+        public  IActionResult About()
         {
+            
             return View(_aboutAsPageInfo);
         }
 
-            
+        [HttpGet]
+        public IActionResult Contact()
+        {
+            throw new NullReferenceException();
+            return View();
+        }
 
-        
+        [HttpPost]
+        public IActionResult Contact(EmailSendDto emailSendDto)
+        {
+            return View();
+        }
+
+
+
+
 
 
     }
