@@ -33,6 +33,7 @@ namespace BlogProject.MvcUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AboutAsPageInfo>(Configuration.GetSection("AboutAsPageInfo"));
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
             services.AddControllersWithViews(options => 
             {
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(

@@ -34,35 +34,34 @@ namespace BlogProject.MvcUI.Filters
                 switch (context.Exception)
                 {
                     case SqlNullValueException:
-                        mvcErrorModel.Message = $"Beklenmedik bir veritabanı hatası oluştu.";
+                        mvcErrorModel.Message =
+                            $"Üzgünüz, işleminiz sırasında beklenmedik bir veritabanı hatası oluştu. Sorunu en kısa sürede çözeceğiz.";
                         mvcErrorModel.Detail = context.Exception.Message;
                         result = new ViewResult { ViewName = "Error" };
                         result.StatusCode = 500;
                         _logger.LogError(context.Exception, context.Exception.Message);
                         break;
                     case NullReferenceException:
-                        mvcErrorModel.Message = $"Beklenmedik bir null veri hatası oluştu.";
+                        mvcErrorModel.Message =
+                            $"Üzgünüz, işleminiz sırasında beklenmedik bir null veriye rastlandı. Sorunu en kısa sürede çözeceğiz.";
                         mvcErrorModel.Detail = context.Exception.Message;
                         result = new ViewResult { ViewName = "Error" };
                         result.StatusCode = 403;
                         _logger.LogError(context.Exception, context.Exception.Message);
                         break;
                     default:
-                        mvcErrorModel.Message = $"Beklenmedik bir hata oluştu.";
+                        mvcErrorModel.Message =
+                            $"Üzgünüz, işleminiz sırasında beklenmedik bir hata oluştu. Sorunu en kısa sürede çözeceğiz.";
                         result = new ViewResult { ViewName = "Error" };
                         result.StatusCode = 500;
-                        _logger.LogError(context.Exception, context.Exception.Message);
+                        _logger.LogError(context.Exception, "Bu benim log hata mesajım!");
                         break;
-
                 }
-                result = new ViewResult { ViewName = "Error" };
-                
                 result.ViewData = new ViewDataDictionary(_metaDataProvider, context.ModelState);
                 result.ViewData.Add("MvcErrorModel", mvcErrorModel);
                 context.Result = result;
-
             }
-                
+
         }
     }
 }

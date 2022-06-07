@@ -25,6 +25,7 @@ namespace BlogProject.MvcUI
                 }).ConfigureLogging(logging =>
                 {
                     logging.ClearProviders(); // Diðer loglarýn aktif olmasýný önlüyoruz
+                    
                 }).UseNLog();
     }
 }
